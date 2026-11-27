@@ -1,0 +1,10 @@
+102 theorems in the LatticePaths namespace checked: each depends at most on propext, Classical.choice and Quot.sound.
+'LatticePaths.ce_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.ce_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.ce_comm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.split_lemma' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.admissible_G' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.norm_le_G' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.shankar_inequality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.even_family_card_sq_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticePaths.even_family_square' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,5 +1,5 @@
-/-
-  Enumerative.lean -- Lean 4 kernel checks (core Lean only, no Mathlib) of finite statements on
+/-!
+  Enumerative.lean -- Lean 4 kernel checks (ported to Lean 4.33 with Mathlib in the build, the definitions use core only) of finite statements on
   Eulerian polynomials of even and odd permutations, caged permutations, deformed Dumont
   permutations, the sequence Q_k and its Hankel determinants, and the 2-Steiner distance matrix
   of a path.
@@ -30,6 +30,8 @@
                          and a_0 = -(n-1).
   * `steiner_peak`     : for 6 ≤ n ≤ 10 the largest |a_i|, i ≤ 2n-4, is attained at i = n-1 only.
 -/
+
+namespace LatticePaths.Finite.Enum
 
 /-! ## Permutations -/
 
@@ -65,16 +67,24 @@ def addAt : Nat → Int → List Int → List Int
   | 0, v, x :: xs => (x + v) :: xs
   | k + 1, v, x :: xs => x :: addAt k v xs
 
-/-- Σ weight(π) t^stat(π) over the permutations of [n], as a list of n coefficients -/
-def distr (n : Nat) (stat : List Nat → Nat) (weight : List Nat → Int) : List Int :=
-  (perms n).foldl (fun acc p => addAt (stat p) (weight p) acc) (List.replicate n 0)
-
-/-! ## Polynomials -/
-
 def padd : List Int → List Int → List Int
   | [], q => q
   | p, [] => p
   | a :: as, b :: bs => (a + b) :: padd as bs
+
+/-- The polynomial `Σ weight(π) t^stat(π)` over the permutations obtained from `p` (a permutation
+of 0, ..., k-1) by inserting k, k+1, ... in all positions, `fuel` more times. The sum is formed
+along the insertion tree, so that the kernel never builds a long chain of pending additions. -/
+def visit (stat : List Nat → Nat) (weight : List Nat → Int) :
+    Nat → Nat → List Nat → List Int
+  | 0, _, p => List.replicate (stat p) 0 ++ [weight p]
+  | f + 1, k, p => (insertAll k p).foldr (fun q acc => padd (visit stat weight f (k + 1) q) acc) []
+
+/-- Σ weight(π) t^stat(π) over the permutations of [n], as a list of n coefficients -/
+def distr (n : Nat) (stat : List Nat → Nat) (weight : List Nat → Int) : List Int :=
+  padd (visit stat weight n 0 []) (List.replicate n 0)
+
+/-! ## Polynomials -/
 
 def pmul : List Int → List Int → List Int
   | [], _ => []
@@ -334,3 +344,5 @@ theorem steiner_peak : [6, 7, 8, 9, 10].all steinerPeak = true := by decide +ker
 #print axioms hankel_minors_positive
 #print axioms steiner_path
 #print axioms steiner_peak
+
+end LatticePaths.Finite.Enum

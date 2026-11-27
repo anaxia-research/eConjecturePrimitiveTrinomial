@@ -1,6 +1,6 @@
-/-
-  LatticePaths.lean -- Lean 4 kernel checks (core Lean only, no Mathlib) for
-  "Parity Families of Lattice Paths and Real-Rooted Signed Eulerian Polynomials".
+/-!
+  LatticePaths.lean -- Lean 4 kernel checks (ported to Lean 4.33 with Mathlib in the build, the definitions use core only) for
+  "Parity Families of Lattice Paths".
 
   A word of length k is a natural number below 2^k: bit i - 1 holds the i-th letter (1 = N, 0 = E).
   `B k x y` is the parity of the number of positions i with x_i = y_i and w(x_{<i}) = w(y_{<i}),
@@ -27,6 +27,8 @@
                          Z^d), the d^r concatenations of r blocks ab, ba, cc pairwise share an even
                          number of edges (d = 3, 4 with r ≤ 3; d = 5 with r ≤ 2).
 -/
+
+namespace LatticePaths.Finite.Paths
 
 /-- `B` with `i` letters left, current weights `wx`, `wy` -/
 def BAux : Nat → Nat → Nat → Nat → Nat → Bool
@@ -314,3 +316,5 @@ theorem block_families_dim5 : [1, 2].all (fun r => blockFamilyOK 5 r) = true := 
 #print axioms block_families_dim3
 #print axioms block_families_dim4
 #print axioms block_families_dim5
+
+end LatticePaths.Finite.Paths
