@@ -1,0 +1,31 @@
+name: julia
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  julia:
+    name: Julia checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.11"
+      - name: Run every script
+        run: |
+          cd julia
+          julia run_all.jl | tee out.txt
+          grep -q ", 0 failed" out.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: julia-log
+          path: julia/out.txt
